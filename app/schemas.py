@@ -7,5 +7,7 @@ def serialize_student(student):
         "hocsinh_id": student.id,
         "hocsinh_name": student.name,
         "hocsinh_age": student.age,
-        "hocsinh_grade": student.grade
+        "hocsinh_grade": student.grade,
+        "hocsinh_username" : student.username,
+        "hocsinh_password" : student.password
     }

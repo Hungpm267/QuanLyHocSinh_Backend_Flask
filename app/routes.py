@@ -22,7 +22,7 @@ def get_student(id):
 @student_bp.route('/', methods=['POST'])
 def create_student():
     data = request.get_json()
-    new_student = Student(name=data['name'], age=data['age'], grade=data['grade'])
+    new_student = Student(name=data['name'], age=data['age'], grade=data['grade'], username = data['username'], password = data['password'])
     db.session.add(new_student)
     db.session.commit()
     return jsonify(serialize_student(new_student)), 201
@@ -43,5 +43,19 @@ def delete_student(id):
     db.session.delete(student)
     db.session.commit()
     return jsonify({"message": "Deleted successfully"})
+
+@student_bp.route('/login', methods=['POST'])
+def student_login():
+    data = request.get_json()
+
+    username = data.get('username')
+    password = data.get('password')
+
+    student = Student.query.filter_by(username=username).first()
+
+    if student and student.password == password:
+        return jsonify({"message": "Đăng nhập thành công!"}), 200
+    else:
+        return jsonify({"error": "Tên đăng nhập hoặc mật khẩu không đúng"}), 401
 
 
