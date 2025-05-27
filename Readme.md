@@ -75,6 +75,57 @@ user = User.query.filter_by(id=1).first()
 
 ---
 
+Dưới đây là phần bổ sung lý thuyết về **CORS** được viết theo cùng phong cách với phần còn lại của README của bạn:
+
+---
+
+# 🌐 CORS là gì?
+
+**CORS** (*Cross-Origin Resource Sharing*) là cơ chế bảo mật trên trình duyệt, cho phép hoặc chặn **giao tiếp giữa các nguồn khác nhau** (ví dụ: frontend chạy ở `localhost:3000` gọi API từ `localhost:5000`).
+
+Trong Flask, nếu bạn xây dựng API để frontend (React, Vue, v.v.) gọi tới, thì gần như **bắt buộc phải bật CORS**, nếu không sẽ bị lỗi như:
+
+```text
+Access to fetch at 'http://localhost:5000' from origin 'http://localhost:3000' has been blocked by CORS policy
+```
+
+### ✅ Giải pháp: dùng `flask-cors`
+
+Cài đặt:
+
+```bash
+pip install flask-cors
+```
+
+Sử dụng trong `run.py` hoặc file cấu hình chính:
+
+```python
+from flask_cors import CORS
+
+# Áp dụng cho toàn bộ app
+CORS(app)
+```
+
+Bạn cũng có thể giới hạn cho từng blueprint hoặc route, hoặc chỉ cho phép một số domain cụ thể:
+
+```python
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+```
+
+---
+
+📌 **Tóm lại:**
+
+* CORS **không phải bug**, mà là bảo mật trình duyệt.
+* CORS rất quan trọng khi backend và frontend **chạy ở các port khác nhau**.
+
+---
+
+Bạn có muốn mình cập nhật luôn phần code mẫu `run.py` để bật CORS đúng cách không?
+
+
+---
+
 > 💡 *Tip:* Hãy giữ README này được cập nhật khi dự án thay đổi 
 
 ---
