@@ -1,39 +1,82 @@
-===========================================================
-🚀 Cách chạy project:
 
-# Cài đặt môi trường
+
+---
+
+# 🚀 Hướng Dẫn Chạy Dự Án
+
+## 🛠️ Cài đặt môi trường
+
+```bash
 python -m venv venv
-source venv/bin/activate  # Windows dùng venv\Scripts\activate
+source venv/bin/activate  # Trên Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
 
-# Khởi tạo database
+## 🗄️ Khởi tạo và nâng cấp CSDL (Database)
+
+```bash
 flask db init
 flask db migrate -m "Initial migration"
 flask db upgrade
+```
 
-# Chạy app
+## ▶️ Chạy ứng dụng
+
+```bash
 python run.py
-===========================================================
+```
 
-# migrate
-Flask-Migrate giúp bạn tự động hóa và quản lý quá trình cập nhật cấu trúc cơ sở dữ liệu theo các thay đổi trong code Python, giống như Git quản lý code vậy – giúp tránh lỗi và tiện làm việc nhóm.
+---
 
-===========================================================
+# 🔄 Flask-Migrate là gì?
 
-# Blueprint
-Blueprint là một "bản thiết kế" cho các phần của ứng dụng Flask – nó đóng gói các route, template, static files và logic liên quan vào từng module riêng biệt.
-===========================================================
+**Flask-Migrate** giúp tự động hóa việc thay đổi cấu trúc cơ sở dữ liệu (database migration) dựa trên thay đổi trong mô hình Python.
+Tương tự như Git quản lý mã nguồn, Flask-Migrate giúp bạn:
 
-# ORM
+* Tránh lỗi do thay đổi thủ công.
+* Dễ dàng làm việc nhóm và theo dõi lịch sử thay đổi.
 
-ORM là kỹ thuật lập trình giúp bạn tương tác với cơ sở dữ liệu bằng đối tượng (object) thay vì viết câu lệnh SQL thủ công.
+---
 
-===========================================================
+# 🧩 Blueprint là gì?
 
-# Marshmallow là thư viện giúp bạn:
-•	Chuyển đổi object Python → JSON (serialize)
-•	Chuyển đổi JSON → object Python (deserialize)
-•	Xác thực dữ liệu (validation)
+**Blueprint** trong Flask là một "bản thiết kế" cho các phần của ứng dụng. Nó giúp bạn:
 
-===========================================================
-===========================================================
+* Tách biệt các chức năng của app thành từng module.
+* Tổ chức route, template, static files và logic một cách gọn gàng.
+
+➡️ Hữu ích khi ứng dụng lớn dần hoặc làm việc theo nhóm.
+
+---
+
+# 🗃️ ORM (Object-Relational Mapping)
+
+**ORM** cho phép bạn làm việc với database bằng cách thao tác object trong Python thay vì viết SQL thủ công.
+
+Ví dụ:
+
+```python
+user = User.query.filter_by(id=1).first()
+```
+
+✅ Giúp code ngắn gọn, dễ bảo trì và ít lỗi hơn.
+
+---
+
+# 🧪 Marshmallow là gì?
+
+**Marshmallow** là thư viện hỗ trợ:
+
+* ✅ **Serialize**: Chuyển object Python → JSON
+* ✅ **Deserialize**: Chuyển JSON → object Python
+* ✅ **Validation**: Kiểm tra dữ liệu đầu vào hợp lệ
+
+➡️ Hữu ích khi xây dựng API với Flask.
+
+---
+
+> 💡 *Tip:* Hãy giữ README này được cập nhật khi dự án thay đổi nhé!
+
+---
+
+Bạn có muốn thêm phần **Mô tả dự án** hoặc **Tác giả / Thông tin liên hệ** không?
