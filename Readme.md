@@ -75,8 +75,8 @@ user = User.query.filter_by(id=1).first()
 
 ---
 
-> 💡 *Tip:* Hãy giữ README này được cập nhật khi dự án thay đổi nhé!
+> 💡 *Tip:* Hãy giữ README này được cập nhật khi dự án thay đổi 
 
 ---
 
-Bạn có muốn thêm phần **Mô tả dự án** hoặc **Tác giả / Thông tin liên hệ** không?
+
