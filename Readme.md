@@ -73,9 +73,7 @@ user = User.query.filter_by(id=1).first()
 
 ➡️ Hữu ích khi xây dựng API với Flask.
 
----
 
-Dưới đây là phần bổ sung lý thuyết về **CORS** được viết theo cùng phong cách với phần còn lại của README của bạn:
 
 ---
 
