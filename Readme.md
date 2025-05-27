@@ -112,16 +112,13 @@ Bạn cũng có thể giới hạn cho từng blueprint hoặc route, hoặc ch�
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 ```
 
----
 
 📌 **Tóm lại:**
 
 * CORS **không phải bug**, mà là bảo mật trình duyệt.
 * CORS rất quan trọng khi backend và frontend **chạy ở các port khác nhau**.
 
----
 
-Bạn có muốn mình cập nhật luôn phần code mẫu `run.py` để bật CORS đúng cách không?
 
 
 ---
