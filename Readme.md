@@ -120,7 +120,7 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 JWT (JSON Web Token) là một chuẩn mở (RFC 7519) dùng để truyền thông tin giữa các bên một cách an toàn dưới dạng một **đối tượng JSON** nhỏ gọn, tự chứa. JWT thường được sử dụng để xác thực người dùng và trao đổi thông tin giữa client và server.
 
----
+
 
 ## **1. Cấu trúc của JWT**
 
