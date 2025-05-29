@@ -116,8 +116,96 @@ CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 * CORS **không phải bug**, mà là bảo mật trình duyệt.
 * CORS rất quan trọng khi backend và frontend **chạy ở các port khác nhau**.
 
+---
 
+JWT (JSON Web Token) là một chuẩn mở (RFC 7519) dùng để truyền thông tin giữa các bên một cách an toàn dưới dạng một **đối tượng JSON** nhỏ gọn, tự chứa. JWT thường được sử dụng để xác thực người dùng và trao đổi thông tin giữa client và server.
 
+---
+
+## **1. Cấu trúc của JWT**
+
+JWT gồm 3 phần, được nối với nhau bằng dấu chấm (`.`):
+
+```
+Header.Payload.Signature
+```
+
+### 🔹 a. **Header**
+
+Thường gồm 2 thông tin:
+
+```json
+{
+  "alg": "HS256",      // Thuật toán ký (ví dụ: HS256, RS256)
+  "typ": "JWT"         // Kiểu token
+}
+```
+
+### 🔹 b. **Payload**
+
+Chứa dữ liệu (claims) mà bạn muốn truyền đi, gồm 3 loại:
+
+* **Registered claims**: các trường chuẩn như:
+
+  * `iss` (issuer) – người phát hành
+  * `sub` (subject) – chủ thể
+  * `aud` (audience) – đối tượng nhận
+  * `exp` (expiration) – thời điểm hết hạn
+  * `iat` (issued at) – thời điểm phát hành
+* **Public claims**: có thể dùng chung, cần đăng ký tránh trùng lặp.
+* **Private claims**: thông tin tùy chỉnh giữa các bên (ví dụ: userId, role...)
+
+Ví dụ:
+
+```json
+{
+  "sub": "1234567890",
+  "name": "Nguyen Van A",
+  "admin": true,
+  "iat": 1516239022
+}
+```
+
+### 🔹 c. **Signature**
+
+Dùng để xác thực token không bị thay đổi. Tạo ra bằng cách:
+
+```
+HMACSHA256(
+  base64UrlEncode(header) + "." + base64UrlEncode(payload),
+  secret
+)
+```
+
+---
+
+## **2. Cách JWT hoạt động**
+
+1. **Login**: Người dùng đăng nhập => Server xác thực => Tạo JWT => Gửi về client.
+2. **Lưu trữ**: Client lưu JWT (thường trong localStorage hoặc cookie).
+3. **Gửi yêu cầu**: Với mỗi request, client gửi JWT trong header:
+
+```
+Authorization: Bearer <token>
+```
+
+4. **Xác thực**: Server nhận token => kiểm tra chữ ký, thời hạn... => nếu hợp lệ thì cho phép truy cập.
+
+---
+
+## **3. Ưu điểm và Hạn chế**
+
+### ✅ Ưu điểm:
+
+* Gọn nhẹ, dễ truyền qua HTTP.
+* Tự chứa: không cần lưu session phía server.
+* Có thể dùng cho cả xác thực và phân quyền.
+
+### ❌ Hạn chế:
+
+* Không thể hủy token trước khi hết hạn (trừ khi dùng blacklist).
+* Nếu bị lộ `secret key`, hệ thống sẽ bị tấn công.
+* Payload có thể bị đọc nếu không mã hóa (dù không sửa được nếu không có `secret`).
 
 ---
 
