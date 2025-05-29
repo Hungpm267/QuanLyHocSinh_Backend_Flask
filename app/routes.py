@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from .models import Student
 from .database import db
 from .schemas import serialize_student
+from flask_jwt_extended import create_access_token
 
 student_bp = Blueprint(
     'students',      # Tên blueprint
@@ -44,18 +45,52 @@ def delete_student(id):
     db.session.commit()
     return jsonify({"message": "Deleted successfully"})
 
+"""================login và register================"""
+
+@student_bp.route('/register', methods = ['POST'])
+def student_register():
+    data = request.get_json()
+    student = Student.query.filter_by(username = data['username']).first()
+
+    if student:
+        return jsonify({'msg': 'username da ton tai roi'}), 400
+    
+    student = Student(name = data['name'], age = data['age'], grade = data['grade'])
+    student.username = data.get('username',student.username)
+    student.set_password(data['password'])
+    db.session.add(student)
+    db.session.commit()
+
+    return jsonify({'msg': 'tao tai khoan thanh cong'}), 201
+
+
+
 @student_bp.route('/login', methods=['POST'])
 def student_login():
     data = request.get_json()
+    username = data['username']
+    password = data['password']
 
-    username = data.get('username')
-    password = data.get('password')
+    hocsinh = Student.query.filter_by(username = username).first()
 
-    student = Student.query.filter_by(username=username).first()
-
-    if student and student.password == password:
-        return jsonify({"message": "Đăng nhập thành công!"}), 200
-    else:
-        return jsonify({"error": "Tên đăng nhập hoặc mật khẩu không đúng"}), 401
+    if not hocsinh:
+        return jsonify({'msg': 'username khong ton tai'}), 400
+    else: 
+        if hocsinh.check_password(password):
+            mk = hocsinh.password
+            token = create_access_token(identity= hocsinh.id)
+            """
+            create_access_token:
+            Đây là hàm từ thư viện flask-jwt-extended.
+            Nó tạo ra một JWT access token.
+            Tham số identity=user.id có nghĩa là:
+            "Gắn ID của user này vào trong token – để sau này xác thực lại có thể biết ai đang gửi request."
+            """
+            return jsonify({'access_token': token, 
+                           'msg': 'dang nhap thanh cong goi',
+                           'matkhau da nhap la': password,
+                           'mat khau sau khi ma hoa': mk}), 200
+        else:
+            return jsonify({'msg': 'mat khau sai'}), 401
 
 
