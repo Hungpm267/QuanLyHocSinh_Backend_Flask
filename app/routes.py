@@ -3,12 +3,31 @@ from .models import Student
 from .database import db
 from .schemas import serialize_student
 from flask_jwt_extended import create_access_token
+from flask_jwt_extended import jwt_required, get_jwt_identity # bảo vệ route bằng jwt
+from flask_jwt_extended import JWTManager, verify_jwt_in_request
+from flask_jwt_extended.exceptions import NoAuthorizationError
 
 student_bp = Blueprint(
     'students',      # Tên blueprint
     __name__         # Tên module (Flask dùng để tìm static và template liên quan)
 )
 
+# Middleware kiểm tra JWT cho mọi request
+@student_bp.before_request
+def jwt_middleware():
+    # Những route không cần token
+    public_routes = ['/students/login', '/students/register']
+
+    # Nếu route hiện tại nằm trong danh sách public thì bỏ qua kiểm tra token
+    if request.path in public_routes:
+        print("ko cần middleware")
+        return
+
+    try:
+        # Kiểm tra token (nếu sai sẽ raise exception)
+        verify_jwt_in_request()
+    except NoAuthorizationError:
+        return jsonify({"msg": "Thiếu hoặc token không hợp lệ rồi"}), 401
 
 @student_bp.route('/', methods=['GET'])
 def get_students():
@@ -29,7 +48,9 @@ def create_student():
     return jsonify(serialize_student(new_student)), 201
 
 @student_bp.route('/<int:id>', methods=['PUT'])
+@jwt_required()
 def update_student(id):
+    current_user = get_jwt_identity()
     student = Student.query.get_or_404(id)
     data = request.get_json()
     student.name = data.get('name', student.name)
@@ -39,7 +60,11 @@ def update_student(id):
     return jsonify(serialize_student(student))
 
 @student_bp.route('/<int:id>', methods=['DELETE'])
+@jwt_required()
 def delete_student(id):
+
+    current_user = get_jwt_identity()
+
     student = Student.query.get_or_404(id)
     db.session.delete(student)
     db.session.commit()
@@ -78,7 +103,7 @@ def student_login():
     else: 
         if hocsinh.check_password(password):
             mk = hocsinh.password
-            token = create_access_token(identity= hocsinh.id)
+            token = create_access_token(identity=str(hocsinh.id))
             """
             create_access_token:
             Đây là hàm từ thư viện flask-jwt-extended.
