@@ -16,7 +16,7 @@ student_bp = Blueprint(
 @student_bp.before_request
 def jwt_middleware():
     # Những route không cần token
-    public_routes = ['/students/login', '/students/register']
+    public_routes = ['/students/login', '/students/register', '/students/']
 
     # Nếu route hiện tại nằm trong danh sách public thì bỏ qua kiểm tra token
     if request.path in public_routes:
@@ -50,14 +50,19 @@ def create_student():
 @student_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_student(id):
-    current_user = get_jwt_identity()
+    current_user = int(get_jwt_identity())
+    if current_user != id:
+        return jsonify({'msg': 'ban ko co quyen thay doi id nay'}), 403
+    else:
+        print('dung roi')
+
     student = Student.query.get_or_404(id)
     data = request.get_json()
     student.name = data.get('name', student.name)
     student.age = data.get('age', student.age)
     student.grade = data.get('grade', student.grade)
     db.session.commit()
-    return jsonify(serialize_student(student))
+    return jsonify(serialize_student(student), {'msg': 'ok da cap nhat'})
 
 @student_bp.route('/<int:id>', methods=['DELETE'])
 @jwt_required()
