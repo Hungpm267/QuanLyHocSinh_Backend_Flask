@@ -3,7 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from .database import db
-from .routes import student_bp
+from .routes import user_bp
 from app.config import Config
 from flask_jwt_extended import JWTManager 
 from flask_cors import CORS  # Import thư viện CORS
@@ -28,6 +28,6 @@ def create_app():
     # Đăng ký middleware
     appcuatoi.before_request(log_request)
 
-    appcuatoi.register_blueprint(student_bp, url_prefix="/students")
+    appcuatoi.register_blueprint(user_bp, url_prefix="/users")
 
     return appcuatoi

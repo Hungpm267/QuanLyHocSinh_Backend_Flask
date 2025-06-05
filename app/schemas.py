@@ -2,12 +2,12 @@
 optional nếu ko dùng marshmallow, nhưng hữu ích để validate dữ liệu
 
 """
-def serialize_student(student):
+def serialize_user(User):
     return {
-        "hocsinh_id": student.id,
-        "hocsinh_name": student.name,
-        "hocsinh_age": student.age,
-        "hocsinh_grade": student.grade,
-        "hocsinh_username" : student.username,
-        "hocsinh_password" : student.password
+        "User_id": User.id,
+        "User_name": User.name,
+        "User_age": User.age,
+        "User_grade": User.grade,
+        "User_username" : User.username,
+        "User_password" : User.password
     }

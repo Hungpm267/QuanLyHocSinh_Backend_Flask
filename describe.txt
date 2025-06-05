@@ -1,0 +1,6 @@
+
+
+
+có 2 user hco sinh va giao vien
+giao vien co the register, login, crate-read-delete hocsinh, thay doi matkhau, quen matkhau, chat voi hocsinh
+hoc sinh co the login, quenmatkhau, thay doi matkhau, read-update hocsinh, chat voi hocsinh-giaovien
